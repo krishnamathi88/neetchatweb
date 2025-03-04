@@ -78,7 +78,6 @@ export default function NeetChatbot() {
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.heading}>neet.ai</h1>
       <div style={styles.chatBox}>
         {messages.map((msg, index) => (
           <div key={index} style={{ ...styles.message, alignSelf: msg.sender === "user" ? "flex-end" : "flex-start" }}>
