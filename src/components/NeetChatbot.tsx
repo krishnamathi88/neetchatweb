@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from "react";
+import React, { useState, useCallback, useEffect, useRef, CSSProperties } from "react";
 import { FaPaperPlane, FaSpinner, FaImage } from "react-icons/fa";
 
 export default function NeetChatbot() {
@@ -7,7 +7,7 @@ export default function NeetChatbot() {
     sender: "user" | "bot";
     image: string | null;
   }
-  
+
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -77,26 +77,24 @@ export default function NeetChatbot() {
   }, [input, image]);
 
   return (
-    <div className="p-4 w-full max-w-lg mx-auto bg-white rounded-lg shadow-md">
-      <h1 className="text-xl font-bold text-center mb-4">NEET Chatbot</h1>
-      <div className="h-80 overflow-y-auto border p-2 rounded-lg bg-gray-50">
+    <div style={styles.container}>
+      <h1 style={styles.heading}>NEET AI Chatbot</h1>
+      <div style={styles.chatBox}>
         {messages.map((msg, index) => (
-          <div key={index} className={`mb-3 ${msg.sender === "user" ? "text-right" : "text-left"}`}>
-            {msg.image && <img src={msg.image} alt="User Upload" className="max-w-xs mb-2 rounded" />}
-            <p className={`p-2 rounded-lg inline-block max-w-[80%] break-words ${msg.sender === "user" ? "bg-blue-500 text-white" : "bg-gray-200"}`}>{msg.text}</p>
+          <div key={index} style={{ ...styles.message, alignSelf: msg.sender === "user" ? "flex-end" : "flex-start" }}>
+            {msg.image && <img src={msg.image} alt="User Upload" style={styles.image} />}
+            <p style={msg.sender === "user" ? styles.userMessage : styles.botMessage}>{msg.text}</p>
           </div>
         ))}
         {isLoading && (
-          <div className="text-left mb-3">
-            <p className="bg-gray-200 p-2 rounded-lg inline-block max-w-[80%] break-words flex items-center">
-              <FaSpinner className="animate-spin mr-2" /> Typing...
-            </p>
+          <div style={styles.loading}>
+            <FaSpinner style={styles.spinner} /> Typing...
           </div>
         )}
         <div ref={messagesEndRef} />
       </div>
-      {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
-      <div className="flex mt-4">
+      {error && <p style={styles.errorText}>{error}</p>}
+      <div style={styles.inputContainer}>
         <input
           type="file"
           accept="image/*"
@@ -105,31 +103,136 @@ export default function NeetChatbot() {
               setImage(e.target.files[0]);
             }
           }}
-          className="hidden"
+          style={{ display: "none" }}
           id="fileInput"
         />
-        <label htmlFor="fileInput" className="bg-gray-200 p-2 rounded-l-lg cursor-pointer">
+        <label htmlFor="fileInput" style={styles.iconButton}>
           <FaImage />
         </label>
-        <textarea
+        <input
+          type="text"
           value={input}
           onChange={(e) => {
             setInput(e.target.value);
             setError("");
           }}
-          onKeyPress={(e) => e.key === "Enter" && handleSend()}
-          className="flex-1 border p-2 h-16 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+          onKeyPress={(e) => e.key === "Enter" && !isLoading && handleSend()}
           placeholder="Ask me anything about NEET..."
-          disabled={isLoading}
+          style={styles.input}
         />
         <button
           onClick={handleSend}
-          className="bg-blue-500 text-white p-2 rounded-r-lg hover:bg-blue-600 disabled:bg-gray-400"
+          style={styles.sendButton}
           disabled={isLoading}
         >
-          {isLoading ? <FaSpinner className="animate-spin" /> : <FaPaperPlane />}
+          {isLoading ? <FaSpinner style={styles.spinner} /> : <FaPaperPlane />}
         </button>
       </div>
+      <div style={styles.watermark}>constructiveai.in</div>
     </div>
   );
 }
+
+const styles: { [key: string]: CSSProperties } = {
+  container: {
+    padding: "16px",
+    width: "100%",
+    maxWidth: "500px",
+    margin: "0 auto",
+    backgroundColor: "#ffffff",
+    borderRadius: "8px",
+    boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+    position: "relative",
+  },
+  heading: {
+    fontSize: "20px",
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: "16px",
+  },
+  chatBox: {
+    height: "400px",
+    overflowY: "auto",
+    border: "1px solid #ccc",
+    padding: "12px",
+    borderRadius: "8px",
+    backgroundColor: "#f8f8f8",
+  },
+  message: {
+    marginBottom: "12px",
+    display: "flex",
+    flexDirection: "column",
+    maxWidth: "80%",
+  },
+  userMessage: {
+    backgroundColor: "#007bff",
+    color: "#ffffff",
+    padding: "10px",
+    borderRadius: "8px",
+    alignSelf: "flex-end",
+  },
+  botMessage: {
+    backgroundColor: "#e0e0e0",
+    padding: "10px",
+    borderRadius: "8px",
+    alignSelf: "flex-start",
+  },
+  loading: {
+    display: "flex",
+    alignItems: "center",
+    backgroundColor: "#e0e0e0",
+    padding: "10px",
+    borderRadius: "8px",
+  },
+  spinner: {
+    marginRight: "8px",
+    animation: "spin 1s linear infinite",
+  },
+  image: {
+    maxWidth: "150px",
+    marginBottom: "8px",
+    borderRadius: "4px",
+  },
+  inputContainer: {
+    display: "flex",
+    marginTop: "22px",
+    alignItems: "center",
+    padding: "10px",
+    borderRadius: "8px",
+    backgroundColor: "#f0f0f0",
+  },
+  input: {
+    flex: 1,
+    padding: "15px",
+    border: "1px solid #ccc",
+    borderRadius: "4px",
+    outline: "none",
+    fontSize: "16px",
+  },
+  iconButton: {
+    backgroundColor: "#e0e0e0",
+    padding: "10px",
+    borderRadius: "4px 0 0 4px",
+    cursor: "pointer",
+  },
+  sendButton: {
+    backgroundColor: "#007bff",
+    color: "#ffffff",
+    padding: "10px",
+    borderRadius: "0 4px 4px 0",
+    cursor: "pointer",
+    border: "none",
+  },
+  errorText: {
+    color: "red",
+    fontSize: "14px",
+    marginTop: "8px",
+  },
+  watermark: {
+    position: "absolute",
+    bottom: "8px",
+    right: "8px",
+    fontSize: "12px",
+    color: "#ccc",
+  },
+};
