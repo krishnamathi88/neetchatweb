@@ -78,7 +78,7 @@ export default function NeetChatbot() {
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.heading}>NEET AI Chatbot</h1>
+      <h1 style={styles.heading}>neet.ai</h1>
       <div style={styles.chatBox}>
         {messages.map((msg, index) => (
           <div key={index} style={{ ...styles.message, alignSelf: msg.sender === "user" ? "flex-end" : "flex-start" }}>
@@ -137,21 +137,17 @@ const styles: { [key: string]: CSSProperties } = {
   container: {
     padding: "16px",
     width: "100%",
-    maxWidth: "500px",
-    margin: "0 auto",
+    height: "100vh",
+    margin: "0",
     backgroundColor: "#ffffff",
     borderRadius: "8px",
     boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
     position: "relative",
-  },
-  heading: {
-    fontSize: "20px",
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: "16px",
+    display: "flex",
+    flexDirection: "column",
   },
   chatBox: {
-    height: "400px",
+    flex: 1,
     overflowY: "auto",
     border: "1px solid #ccc",
     padding: "12px",
@@ -195,7 +191,7 @@ const styles: { [key: string]: CSSProperties } = {
   },
   inputContainer: {
     display: "flex",
-    marginTop: "22px",
+    marginTop: "42px",
     alignItems: "center",
     padding: "10px",
     borderRadius: "8px",
