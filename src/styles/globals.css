@@ -1,30 +1,117 @@
-/* Ensure Tailwind CSS is installed and configured correctly */
+/* Tailwind CSS imports */
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+/* Color variables */
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --primary: #007bff;
+  --primary-hover: #0056b3;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --primary: #3b82f6;
+    --primary-hover: #1d4ed8;
   }
 }
 
+/* Base styles */
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  @apply bg-[var(--background)] text-[var(--foreground)] font-sans;
 }
 
+/* Chatbot container */
+.chat-container {
+  @apply flex flex-col h-screen;
+}
+
+/* Header styles */
+.header {
+  @apply flex justify-between items-center p-4 bg-[var(--primary)] text-white;
+}
+
+.logout-button {
+  @apply bg-white text-[var(--primary)] px-4 py-2 rounded font-bold hover:bg-gray-100 transition-colors;
+}
+
+/* Sign-in card styles */
+.signin-card {
+  @apply bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md w-full max-w-md text-center;
+}
+
+.signin-input {
+  @apply w-full p-3 my-2 border border-gray-300 dark:border-gray-600 rounded text-base;
+}
+
+.primary-button {
+  @apply w-full p-3 my-2 bg-[var(--primary)] text-white rounded font-medium hover:bg-[var(--primary-hover)] transition-colors disabled:opacity-50;
+}
+
+.secondary-button {
+  @apply w-full p-3 my-2 bg-transparent text-[var(--primary)] border border-[var(--primary)] rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors;
+}
+
+/* Chatbot specific styles */
 .ask-input {
-  width: 400px;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid gray;
-  border-radius: 5px;
+  @apply w-full max-w-md p-3 text-base border border-gray-300 dark:border-gray-600 rounded;
+}
+
+.chat-box {
+  @apply flex-1 overflow-y-auto border border-gray-200 dark:border-gray-700 p-3 rounded-lg bg-gray-50 dark:bg-gray-900;
+}
+
+.message {
+  @apply mb-3 flex flex-col max-w-[80%];
+}
+
+.user-message {
+  @apply bg-[var(--primary)] text-white p-3 rounded-lg self-end;
+}
+
+.bot-message {
+  @apply bg-gray-200 dark:bg-gray-700 p-3 rounded-lg self-start;
+}
+
+.loading-indicator {
+  @apply flex items-center bg-gray-200 dark:bg-gray-700 p-3 rounded-lg;
+}
+
+.spinner {
+  @apply animate-spin mr-2;
+}
+
+/* Image upload styles */
+.image-upload {
+  @apply max-w-xs mb-2 rounded;
+}
+
+/* Error text */
+.error-text {
+  @apply text-red-500 text-sm mt-2;
+}
+
+/* Watermark */
+.watermark {
+  @apply absolute bottom-2 right-2 text-xs text-gray-400;
+}
+
+/* Input container */
+.input-container {
+  @apply flex mt-10 items-center p-3 rounded-lg bg-gray-100 dark:bg-gray-800;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .signin-card {
+    @apply p-4;
+  }
+  
+  .ask-input {
+    @apply w-full;
+  }
 }
