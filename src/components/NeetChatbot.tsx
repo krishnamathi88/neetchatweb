@@ -1,80 +1,70 @@
-import React, { useState, useCallback, useEffect, useRef, CSSProperties } from "react";
-import { FaPaperPlane, FaSpinner, FaImage } from "react-icons/fa";
+// ... (previous imports remain the same)
 
-export default function NeetChatbot() {
-  interface Message {
-    text: string;
-    sender: "user" | "bot";
-    image: string | null;
+const handleSend = useCallback(async () => {
+  const trimmedInput = input.trim();
+  if (!trimmedInput && !image) {
+    setError("Please enter a message or upload an image.");
+    return;
   }
 
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [input, setInput] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [image, setImage] = useState<File | null>(null);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  setError("");
+  setIsLoading(true);
 
-  useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+  setMessages((prev) => [
+    ...prev,
+    { text: trimmedInput, sender: "user", image: image ? URL.createObjectURL(image) : null },
+  ]);
+  setInput("");
+  setImage(null);
+
+  const apiKey = process.env.NEXT_PUBLIC_DEEPSEEK_API_KEY; // Change to DeepSeek API key
+  if (!apiKey) {
+    setMessages((prev) => [...prev, { text: "API key missing.", sender: "bot", image: null }]);
+    setIsLoading(false);
+    return;
+  }
+
+  try {
+    const response = await fetch(`https://api.deepseek.com/v1/chat/completions`, { // DeepSeek endpoint
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: "deepseek-chat", // DeepSeek model name
+        messages: [
+          {
+            role: "user",
+            content: trimmedInput,
+            // If you want to include image analysis, you'll need to base64 encode it
+            // and follow DeepSeek's API requirements for multimodal input
+          }
+        ],
+        temperature: 0.7,
+        max_tokens: 2000,
+      }),
+    });
+
+    const responseText = await response.text();
+    console.log("API Response:", responseText);
+    
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`);
     }
-  }, [messages]);
 
-  const handleSend = useCallback(async () => {
-    const trimmedInput = input.trim();
-    if (!trimmedInput && !image) {
-      setError("Please enter a message or upload an image.");
-      return;
-    }
+    const data = JSON.parse(responseText);
+    const botReply = data?.choices?.[0]?.message?.content || "Couldn't fetch an answer.";
 
-    setError("");
-    setIsLoading(true);
+    setMessages((prev) => [...prev, { text: botReply, sender: "bot", image: null }]);
+  } catch (error) {
+    setMessages((prev) => [...prev, { text: `Error: ${(error as Error).message}`, sender: "bot", image: null }]);
+  } finally {
+    setIsLoading(false);
+  }
+}, [input, image]);
 
-    setMessages((prev) => [
-      ...prev,
-      { text: trimmedInput, sender: "user", image: image ? URL.createObjectURL(image) : null },
-    ]);
-    setInput("");
-    setImage(null);
-
-    const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
-    if (!apiKey) {
-      setMessages((prev) => [...prev, { text: "API key missing.", sender: "bot", image: null }]);
-      setIsLoading(false);
-      return;
-    }
-
-    try {
-      const response = await fetch(`https://api.openai.com/v1/chat/completions?t=${new Date().getTime()}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify({
-          model: "gpt-3.5-turbo",
-          messages: [{ role: "user", content: trimmedInput }],
-        }),
-      });
-
-      const responseText = await response.text();
-      console.log("API Response:", responseText);
-      
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-      }
-
-      const data = JSON.parse(responseText);
-      const botReply = data?.choices?.[0]?.message?.content || "Couldn't fetch an answer.";
-
-      setMessages((prev) => [...prev, { text: botReply, sender: "bot", image: null }]);
-    } catch (error) {
-      setMessages((prev) => [...prev, { text: `Error: ${(error as Error).message}`, sender: "bot", image: null }]);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [input, image]);
+// ... (rest of the component remains the same)
 
   return (
     <div style={styles.container}>
