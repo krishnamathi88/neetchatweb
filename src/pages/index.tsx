@@ -103,6 +103,11 @@ export default function NeetChatbot() {
 
   return (
     <div style={styles.pageWrapper}>
+
+      <h1 style={styles.heading}>
+  Welcome to <span style={{ color: "#007bff" }}>NEET Ai</span> – An AI Assistant for your NEET Exams
+</h1>
+
       <div style={styles.apiKeyBox}>
         <input
           type="password"
