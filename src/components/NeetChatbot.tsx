@@ -139,10 +139,9 @@ export default function NeetChatbot() {
 
 const styles: { [key: string]: CSSProperties } = {
   container: {
-    padding: "16px",
-    width: "100%",
-    height: "100vh",
-    margin: "0",
+    width: "360px", // changed from 100% to 360px
+    height: "600px", // changed from 100vh to 600px
+    margin: "auto",
     backgroundColor: "#ffffff",
     borderRadius: "8px",
     boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
@@ -154,85 +153,85 @@ const styles: { [key: string]: CSSProperties } = {
     flex: 1,
     overflowY: "auto",
     border: "1px solid #ccc",
-    padding: "12px",
+    padding: "8px", // slightly reduced
     borderRadius: "8px",
     backgroundColor: "#f8f8f8",
   },
   message: {
-    marginBottom: "12px",
+    marginBottom: "8px", // slightly reduced
     display: "flex",
     flexDirection: "column",
-    maxWidth: "80%",
+    maxWidth: "90%", // tighter messages
   },
   userMessage: {
     backgroundColor: "#007bff",
     color: "#ffffff",
-    padding: "10px",
+    padding: "8px",
     borderRadius: "8px",
-    alignSelf: "flex-end",
+    fontSize: "14px", // smaller text
   },
   botMessage: {
     backgroundColor: "#e0e0e0",
-    padding: "10px",
+    padding: "8px",
     borderRadius: "8px",
-    alignSelf: "flex-start",
+    fontSize: "14px", // smaller text
   },
   loading: {
     display: "flex",
     alignItems: "center",
     backgroundColor: "#e0e0e0",
-    padding: "10px",
+    padding: "8px",
     borderRadius: "8px",
   },
   spinner: {
-    marginRight: "8px",
+    marginRight: "6px",
     animation: "spin 1s linear infinite",
   },
   image: {
-    maxWidth: "150px",
-    marginBottom: "8px",
+    maxWidth: "120px", // reduced image size
+    marginBottom: "6px",
     borderRadius: "4px",
   },
   inputContainer: {
     display: "flex",
-    marginTop: "42px",
+    marginTop: "16px", // reduced space
     alignItems: "center",
-    padding: "10px",
+    padding: "6px",
     borderRadius: "8px",
     backgroundColor: "#f0f0f0",
   },
   input: {
     flex: 1,
-    padding: "15px",
+    padding: "10px",
     border: "1px solid #ccc",
     borderRadius: "4px",
     outline: "none",
-    fontSize: "16px",
+    fontSize: "14px", // smaller font
   },
   iconButton: {
     backgroundColor: "#e0e0e0",
-    padding: "10px",
+    padding: "8px",
     borderRadius: "4px 0 0 4px",
     cursor: "pointer",
   },
   sendButton: {
     backgroundColor: "#007bff",
     color: "#ffffff",
-    padding: "10px",
+    padding: "8px",
     borderRadius: "0 4px 4px 0",
     cursor: "pointer",
     border: "none",
   },
   errorText: {
     color: "red",
-    fontSize: "14px",
-    marginTop: "8px",
+    fontSize: "12px", // smaller error text
+    marginTop: "6px",
   },
   watermark: {
     position: "absolute",
-    bottom: "8px",
+    bottom: "4px",
     right: "8px",
-    fontSize: "12px",
+    fontSize: "10px", // smaller watermark
     color: "#ccc",
   },
 };
